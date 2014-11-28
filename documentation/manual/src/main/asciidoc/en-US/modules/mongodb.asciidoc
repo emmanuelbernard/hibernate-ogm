@@ -296,10 +296,11 @@ Hibernate OGM supports by default the following types:
 
 ===== Entities
 
-Entities are stored as MongoDB documents and not as BLOBs
-which means each entity property will be translated into a document field.
-You can use the name property of the [classname]+@Table+ and [classname]+@Column+ annotations
-to rename the collections and the document's fields if you need to.
+Entities are stored as MongoDB documents and not as BLOBs:
+each entity property will be translated into a document field.
+You can use [classname]+@Table+ and [classname]+@Column+ annotations
+to rename respectively the collection the document is stored in
+and the document's field a property is persisted in.
 
 .Default JPA mapping for an entity
 ====
@@ -318,6 +319,7 @@ public class News {
 
 [source, JSON]
 ----
+// Stored in the Collection "News"
 {
     "_id" : "1234-5678-0123-4567",
     "title": "On the merits of NoSQL",
@@ -330,13 +332,14 @@ public class News {
 [source, JAVA]
 ----
 @Entity
-// Override the collection name
+// Overrides the collection name
 @Table(name = "News_Collection")
 public class News {
 
     @Id
     private String id;
 
+    // Overrides the field name
     @Column(name = "headline")
     private String title;
 
@@ -346,6 +349,7 @@ public class News {
 
 [source, JSON]
 ----
+// Stored in the Collection "News"
 {
     "_id" : "1234-5678-0123-4567",
     "headline": "On the merits of NoSQL",
@@ -357,9 +361,11 @@ public class News {
 
 Hibernate OGM uses the +_id+ field of a MongoDB document to store the identifier columns mapped in the entity.
 
-An identifier type may be one of the <<mongodb-built-in-types>> as well as an embedded class.
-You can use simple identifiers (e.g. of type +long+ with a table-based id generator or of type +String+ with a GUID generator)
-as well as embedded identifiers.
+An identifier type may be one of the <<mongodb-built-in-types,built-in types>>
+or a more complex type represented by an embedded class.
+When you use a built-in type, the identifier is mapped like a regular property.
+When you use an embedded class, then the `_id` is representing a nested document
+containing the embedded class properties.
 
 .Define an identifier as a primitive type
 ====
