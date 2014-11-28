@@ -4,11 +4,12 @@
 
 http://www.mongodb.org[MongoDB] is a document oriented datastore
 written in C++ with strong emphasis on ease of use.
-
-==== Configuring MongoDB
+The nested nature of documents make it a particularly natural fit for most object representations.
 
 This implementation is based upon the MongoDB Java driver.
 The currently supported version is {mongodb-version}.
+
+==== Configuring MongoDB
 
 The following properties are available to configure MongoDB support:
 
@@ -207,7 +208,7 @@ and the MongoDB documents.
 [[mongodb-built-in-types]]
 ===== Builtin types
 
-Hibernate OGM support by default the following types:
+Hibernate OGM supports by default the following types:
 
 * [classname]+java.lang.String+
 
@@ -426,7 +427,7 @@ News collection as JSON in MongoDB
 ====
 
 Generally, it is recommended though to work with MongoDB's object id data type.
-This will facilitate the integration with other applications possibly expecting that common MongoDB id type.
+This will facilitate the integration with other applications expecting that common MongoDB id type.
 To do so, you have two options:
 
 * Define your id property as +org.bson.types.ObjectId+
