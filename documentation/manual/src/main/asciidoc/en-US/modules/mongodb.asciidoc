@@ -887,26 +887,27 @@ public class GrandChild {
 ===== Associations
 
 Hibernate OGM MongoDB proposes three strategies to store navigation information for associations.
-To switch between these strategies,
-either use the +@AssocationStorage+ and +@AssociationDocumentStorage+ annotations (see <<ogm-mongodb-annotation-configuration>>),
-the API for programmatic configuration (see <<ogm-mongodb-programmatic-configuration>>) or
-specify a default strategy via the +hibernate.ogm.datastore.document.association_storage+ and
-+hibernate.ogm.mongodb.association_document_storage+ configuration properties.
-
 The three possible strategies are:
 
 * <<mongodb-in-entity-strategy, IN_ENTITY>> (default)
 * <<mongodb-association-document-strategy, ASSOCIATION_DOCUMENT>>, using a global collection for all associations
 * <<mongodb-collection-per-association-strategy, COLLECTION_PER_ASSOCIATION>>, using a dedicated collection for each association
 
+To switch between these strategies, use of the three approaches to options:
+
+* annotate your entity with +@AssocationStorage+ and +@AssociationDocumentStorage+ annotations (see <<ogm-mongodb-annotation-configuration>>),
+* use the API for programmatic configuration (see <<ogm-mongodb-programmatic-configuration>>)
+* or specify a default strategy via the +hibernate.ogm.datastore.document.association_storage+ and
++hibernate.ogm.mongodb.association_document_storage+ configuration properties.
+
 [[mongodb-in-entity-strategy]]
 ====== In Entity strategy
 
-In this strategy, Hibernate OGM directly stores the id(s)
-of the other side of the association
-into a field or an embedded document
-depending if the mapping concerns a single object or a collection.
-The field that stores the relationship information is named like the entity property.
+In this strategy, Hibernate OGM stores the id(s) of the associated entity(ies)
+into the entity document itself.
+This field stores the id value for to-one associations and an array of id values for to-many associations.
+An embedded id will be represented by a nested document.
+For indexed collections (i.e. `List` or `Map`), the index will be stored along the id.
 
 [NOTE]
 ====
