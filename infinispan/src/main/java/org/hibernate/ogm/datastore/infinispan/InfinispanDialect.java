@@ -6,6 +6,7 @@
  */
 package org.hibernate.ogm.datastore.infinispan;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -143,7 +144,8 @@ public class InfinispanDialect<EK,AK,ISK> extends BaseGridDialect {
 				key.getMetadata()
 		);
 		AK cacheKey = getKeyProvider().getAssociationCacheKey( key );
-		Map<RowKey, Map<String, Object>> atomicMap = AtomicMapLookup.getFineGrainedAtomicMap( cache, cacheKey, false );
+		//Map<RowKey, Map<String, Object>> atomicMap = AtomicMapLookup.getFineGrainedAtomicMap( cache, cacheKey, false );
+		Map<RowKey, Map<String, Object>> atomicMap = cache.get( cacheKey );
 		return atomicMap == null ? null : new Association( new MapAssociationSnapshot( atomicMap ) );
 	}
 
@@ -155,7 +157,12 @@ public class InfinispanDialect<EK,AK,ISK> extends BaseGridDialect {
 				key.getMetadata()
 		);
 		AK cacheKey = getKeyProvider().getAssociationCacheKey( key );
-		Map<RowKey, Map<String, Object>> atomicMap = AtomicMapLookup.getFineGrainedAtomicMap( cache, cacheKey, true );
+		//Map<RowKey, Map<String, Object>> atomicMap = AtomicMapLookup.getFineGrainedAtomicMap( cache, cacheKey, true );
+		Map<RowKey, Map<String, Object>> atomicMap = cache.get( cacheKey );
+		if ( atomicMap == null ) {
+			atomicMap = new HashMap<RowKey, Map<String, Object>>(  );
+			cache.put( cacheKey, atomicMap );
+		}
 		return new Association( new MapAssociationSnapshot( atomicMap ) );
 	}
 
@@ -170,7 +177,12 @@ public class InfinispanDialect<EK,AK,ISK> extends BaseGridDialect {
 				key.getMetadata()
 		);
 		AK cacheKey = getKeyProvider().getAssociationCacheKey( key );
-		AtomicMapLookup.removeAtomicMap( cache, cacheKey );
+		Map<RowKey, Map<String, Object>> atomicMap = cache.get( cacheKey );
+		if ( atomicMap != null ) {
+			atomicMap.clear();
+		}
+		//AtomicMapLookup.removeAtomicMap( cache, cacheKey );
+		cache.remove( cacheKey );
 	}
 
 	@Override
