@@ -3202,6 +3202,15 @@ Poem poem2 = (Poem) session.getNamedQuery( "AthanasiaPoem" )
 ----
 ====
 
+[NOTE]
+====
+Remember to use MongoDB's http://docs.mongodb.org/manual/reference/mongodb-extended-json/[strict mode]
+when writing queries using the MongoDB CLI syntax.
+In particular, put the attribute names in quotes.
+
+To make them more readable, use single quotes.
+====
+
 Hibernate OGM stores data in a natural way so you can still execute queries using the
 MongoDB driver, the main drawback is that the results are going to be raw MongoDB
 documents and not managed entities.
