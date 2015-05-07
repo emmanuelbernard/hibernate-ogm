@@ -132,9 +132,9 @@ public class MongoDBDatastoreProvider extends BaseDatastoreProvider implements S
 					? new MongoClient( serverAddress, clientOptions )
 					: new MongoClient( serverAddress, credentials, clientOptions );
 		}
-		catch (UnknownHostException e) {
-			throw log.mongoOnUnknownHost( config.getHost() );
-		}
+//		catch (UnknownHostException e) {
+//			throw log.mongoOnUnknownHost( config.getHost() );
+//		}
 		catch (RuntimeException e) {
 			throw log.unableToInitializeMongoDB( e );
 		}
